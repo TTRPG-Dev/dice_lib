@@ -17,6 +17,7 @@ defmodule DiceLib.Options do
   def apply_options(results, options) do
     results
     |> die_mod(options[:die_mod])
+    |> drop_lowest(options[:drop_lowest])
   end
 
   @doc """
@@ -33,6 +34,20 @@ defmodule DiceLib.Options do
   def die_mod(results, nil), do: results
   def die_mod(results, die_mod) do
     Enum.map(results, fn roll_result -> roll_result + die_mod end)
+  end
+
+  @doc """
+  Drops the lowest x number of rolls from the result
+
+  ## Examples
+
+    iex> DiceLib.Options.drop_lowest([8, 3, 7, 2], 2)
+    [7, 8]
+  """
+  def drop_lowest(results, nil), do: results
+  def drop_lowest(results, lowest) when is_integer(lowest) do
+    Enum.sort(results)
+    |> Enum.drop(lowest)
   end
 
 end
