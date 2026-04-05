@@ -1,54 +1,8 @@
 defmodule DiceLib.Basic do
+  alias DiceLib.Parsing
   @moduledoc """
-  This module deals with the rolling of any and all dice
+  Basic rolling functionality
   """
-
-  @dice_regex ~r/^([0-9]+)d([0-9]+)$/
-
-  @doc """
-  Validates that a given string conforms to the expexted dice specifying format
-
-  Returns: the input string
-
-  ## Examples
-
-      iex> DiceLib.Basic.validate_dice_str("3d4")
-      "3d4"
-
-      iex> DiceLib.Basic.validate_dice_str("3")
-      ** (RuntimeError) Improper dice format. Dice must be given in xdy where x and y are both integers
-
-  """
-  def validate_dice_str(str) do
-    if not Regex.match?(@dice_regex, str) do
-      raise "Improper dice format. Dice must be given in xdy where x and y are both integers"
-    end
-
-    str
-  end
-
-  @doc """
-  Tries to parse a given dice spec string into it's component parts
-
-  Returns: a tuple where the first item is the number of times to roll the die and the second indicates the  number or sides the die has
-
-  ## Examples
-
-      iex> DiceLib.Basic.parse_roll_spec!("3d4")
-      {3, 4}
-
-      iex> DiceLib.Basic.parse_roll_spec!("3")
-      ** (RuntimeError) Improper dice format. Dice must be given in xdy where x and y are both integers
-
-  """
-
-  def parse_roll_spec!(roll_spec) when is_bitstring(roll_spec) do
-    roll_spec
-    |> validate_dice_str()
-    |> String.split("d")
-    |> Enum.map(fn x -> String.to_integer(x) end)
-    |> List.to_tuple()
-  end
 
   @doc """
   Rolls the a number of multisided dice
@@ -75,7 +29,7 @@ defmodule DiceLib.Basic do
 
   """
   def roll(str) when is_bitstring(str) do
-    {number_of_dice, sides} = parse_roll_spec!(str)
+    {number_of_dice, sides} = Parsing.parse_roll_spec!(str)
     roll(number_of_dice, sides)
   end
 
