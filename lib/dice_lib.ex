@@ -21,7 +21,7 @@ defmodule DiceLib do
 
       iex> :rand.seed(:exsplus, 1337)
       iex> DiceLib.roll("3d8", %{die_mod: 2, drop_lowest: 1})
-      [7, 10]
+      [10, 7]
 
       iex> DiceLib.roll("bad_input")
       ** (RuntimeError) Improper dice format. Dice must be given in xdy where x and y are both integers

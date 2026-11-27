@@ -37,17 +37,22 @@ defmodule DiceLib.Options do
   end
 
   @doc """
-  Drops the lowest x number of rolls from the result
+  Drops the lowest x number of rolls from the result, keeping the
+  remaining rolls in the order they were rolled
 
   ## Examples
 
     iex> DiceLib.Options.drop_lowest([8, 3, 7, 2], 2)
-    [7, 8]
+    [8, 7]
+
+    iex> DiceLib.Options.drop_lowest([2, 5, 2, 4], 1)
+    [5, 2, 4]
   """
   def drop_lowest(results, nil), do: results
   def drop_lowest(results, lowest) when is_integer(lowest) do
-    Enum.sort(results)
-    |> Enum.drop(lowest)
+    # `--` removes only the first occurrence of each element, so duplicate
+    # values are dropped no more times than requested
+    results -- Enum.take(Enum.sort(results), lowest)
   end
 
 end
