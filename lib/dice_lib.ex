@@ -23,7 +23,7 @@ defmodule DiceLib do
       iex> DiceLib.roll("3d8", %{die_mod: 2, drop_lowest: 1})
       [7, 10]
 
-      iex> DiceLib.Basic.roll("bad_input")
+      iex> DiceLib.roll("bad_input")
       ** (RuntimeError) Improper dice format. Dice must be given in xdy where x and y are both integers
   """
   def roll(spec), do: Basic.roll(spec)
