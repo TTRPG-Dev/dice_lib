@@ -4,6 +4,7 @@ defmodule DiceLib do
   """
   alias DiceLib.Basic
   alias DiceLib.Options
+  alias DiceLib.Parsing
 
   @doc """
   The primary roll function
@@ -28,7 +29,12 @@ defmodule DiceLib do
   """
   def roll(spec), do: Basic.roll(spec)
   def roll(spec, options) do
-    Basic.roll(spec)
-    |> Options.apply_options(options)
+    die_spec = to_die_spec(spec)
+
+    Basic.roll(die_spec)
+    |> Options.apply_options(die_spec, options)
   end
+
+  defp to_die_spec({_number_of_dice, _sides} = die_spec), do: die_spec
+  defp to_die_spec(spec) when is_bitstring(spec), do: Parsing.parse_roll_spec!(spec)
 end

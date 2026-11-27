@@ -6,15 +6,18 @@ defmodule DiceLib.Options do
   @doc """
   Apply all provided options to the roll result
 
+  `die_spec` is the parsed `{number_of_dice, sides}` the results were rolled
+  from, for options that need to know about the dice themselves
+
   ## Examples
-    iex> DiceLib.Options.apply_options([1, 2, 3], %{})
+    iex> DiceLib.Options.apply_options([1, 2, 3], {3, 6}, %{})
     [1, 2, 3]
 
-    iex> DiceLib.Options.apply_options([1, 2, 3], %{die_mod: 5})
+    iex> DiceLib.Options.apply_options([1, 2, 3], {3, 6}, %{die_mod: 5})
     [6, 7, 8]
   """
-  def apply_options(results, options) when map_size(options) == 0, do: results
-  def apply_options(results, options) do
+  def apply_options(results, _die_spec, options) when map_size(options) == 0, do: results
+  def apply_options(results, _die_spec, options) do
     results
     |> die_mod(options[:die_mod])
     |> drop_lowest(options[:drop_lowest])
